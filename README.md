@@ -1,79 +1,65 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+//app working 
 
-# Getting Started
+i tried to make simple ui as much as possible 
+so first screen is subscription listing that have plus(+) button on bottom where we can add subscription .
+that screen have 2 bottomtab one is subscription which is current screen and secound is analytic where we can see graphs 
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+-->on press of add we can see fill details like name ,amt etc when save again come to listing screen if want to edit then onpress of list and if want to delete there is button on right side for delete .
 
-## Step 1: Start the Metro Server
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//set up instruction 
+i use react native cli with react native version 0.74 so there is no any extra setup required just run as we run our app.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//library used
+| Library                                   | Purpose                |
+| ----------------------------------------- | ---------------------- |
+| react                                     | Core UI library        |
+| react-native                              | Mobile framework       |
+| @react-navigation/native                  | Navigation system      |
+| @react-navigation/native-stack            | Stack navigation       |
+| @react-navigation/bottom-tabs             | Bottom tab navigation  |
+| react-native-safe-area-context            | Safe area handling     |
+| react-native-screens                      | Navigation performance |
+| @react-native-async-storage/async-storage | Local data storage     |
+| @react-native-community/datetimepicker    | Date selection         |
+| react-native-uuid                         |Generate unique IDs for add/edit screen|
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//renewal date logic working 
+->Each subscription has a start date and a billing cycle (Monthly, Quarterly, Yearly).
+->To get the next renewal date, we start from the start date and keep adding months/quarters/years until the date is after today.
+->To show days left, we subtract today from the next renewal date.
+->Both calculations are in utils/dateUtils.js using getNextRenewalDate and daysUntil.
+Example:
+Start: 1 Dec, Monthly → Next renewal = 1 Jan
+Days left = difference from today
 
-To start Metro, run the following command from the _root_ of your React Native project:
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+analytics logic explain 
+1.Monthly Spending
+Logic:
+i create an array of 12 months (Jan–Dec) with initial value 0.
+Loop through all subscriptions:
+Get the month from the subscription’s startDate.
+Add the subscription’s amount to the corresponding month.
+Display this data as a Bar Chart.
+Example: If a subscription of ₹500 started in March, March’s total becomes 500.
 
-```bash
-# using npm
-npm start
+2.Category-wise Spending
+Logic:
+Loop through all subscriptions:
+Group amounts by category. If category is missing, mark it as “Other”.
+Sum the amounts for each category.
+Display as a Pie Chart with legend showing amount and category name.
+Example: If two subscriptions belong to “Entertainment” for ₹200 and ₹300, total for “Entertainment” = ₹500.
 
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+3.Upcoming Renewals
+Logic:
+For each subscription, calculate next renewal date based on:
+startDate
+cycle (Monthly, Quarterly, Yearly)
+Calculate days until next renewal.
+Categorize subscriptions into this type of partition:
+0–30 days, 31–60 days, 61–90 days, 91–365 days.
+Display as a Bar Chart.
+Example: If a monthly subscription renews in 20 days, it goes into the 0–30 days.
