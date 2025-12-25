@@ -56,7 +56,7 @@ export default function AnalyticsScreen() {
     setCategoryData(data);
   };
 
-  /* ---------------- Upcoming Renewals (FIXED) ---------------- */
+  /* ---------------- Upcoming Renewals  ---------------- */
   const calculateUpcomingRenewals = (list) => {
     const buckets = {
       '0-30 Days': 0,
@@ -172,7 +172,6 @@ export default function AnalyticsScreen() {
   );
 }
 
-/* ---------------- Reusable ---------------- */
 const EmptyBox = () => (
   <View style={styles.emptyBox}>
     <Text style={styles.emptyText}>No subscriptions added</Text>
@@ -189,7 +188,6 @@ const chartConfig = (color) => ({
   barPercentage: 0.5,
 });
 
-/* ---------------- Styles ---------------- */
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f8f9fa' },
 
