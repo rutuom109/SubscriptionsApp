@@ -1,19 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
 const ArticleItem = ({ article, onRestore, showRestore }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  const toggleExpand = () => {
+    setExpanded(!expanded);
+  };
+
   return (
     <View style={styles.container}>
       {article.urlToImage ? (
         <Image source={{ uri: article.urlToImage }} style={styles.image} />
       ) : null}
+
       <View style={styles.textContainer}>
         <Text style={styles.title}>{article.title}</Text>
         <Text style={styles.author}>{article.author || "Unknown Author"}</Text>
-        <Text style={styles.content} numberOfLines={2}>
+
+        <Text
+          style={styles.content}
+          numberOfLines={expanded ? undefined : 2} 
+        >
           {article.content || ""}
         </Text>
+
+        {article.content && article.content.length > 100 && (
+          <TouchableOpacity onPress={toggleExpand}>
+            <Text style={styles.readMore}>
+              {expanded ? "Read Less" : "Read More"}
+            </Text>
+          </TouchableOpacity>
+        )}
+
         <Text style={styles.date}>
           {new Date(article.publishedAt).toLocaleString()}
         </Text>
@@ -33,7 +53,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     backgroundColor: "#1e1e1e",
-    
     marginVertical: 5,
     marginHorizontal: 12,
     borderRadius: 12,
@@ -43,14 +62,46 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-     minHeight: 170,
+    minHeight: 170,
   },
-  image: { width: 100, height: 150,marginVertical:15,marginLeft:5 },
-  textContainer: { flex: 1, padding: 12 },
-  title: { color: "#fff", fontWeight: "bold", fontSize: 16 },
-  author: { color: "#ccc", fontSize: 12, marginTop: 2 },
-  content: { color: "#aaa", fontSize: 14, marginTop: 4 },
-  date: { color: "#888", fontSize: 10, marginTop: 4 },
+  image: {
+    width: 100,
+    height: 150,
+    marginVertical: 15,
+    marginLeft: 5,
+    borderRadius: 8,
+  },
+  textContainer: {
+    flex: 1,
+    padding: 12,
+    justifyContent: "space-between",
+  },
+  title: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  author: {
+    color: "#ccc",
+    fontSize: 12,
+    marginTop: 2,
+  },
+  content: {
+    color: "#aaa",
+    fontSize: 14,
+    marginTop: 6,
+    lineHeight: 20,
+  },
+  readMore: {
+    color: "#1e90ff",
+    fontWeight: "bold",
+    marginTop: 4,
+  },
+  date: {
+    color: "#888",
+    fontSize: 10,
+    marginTop: 6,
+  },
   button: {
     flexDirection: "row",
     backgroundColor: "#444",
@@ -60,7 +111,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: "center",
   },
-  buttonText: { color: "#fff", fontWeight: "bold" },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
 });
 
 export default ArticleItem;
